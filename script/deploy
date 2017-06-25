@@ -8,7 +8,7 @@ set -o errexit
 # exit if a command in a pipeline fails
 set -o pipefail
 
-git config --global user.email "ns@grove.co"
+git config --global user.email "noah@batteredoats.com"
 
 git checkout -b deploy
 git add --all --force ./dist/
