@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="{fullscreen: isFullscreen}">
-    <game></game>
+    <game v-if="$root.ready"></game>
   </div>
 </template>
 

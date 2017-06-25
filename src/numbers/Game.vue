@@ -40,23 +40,35 @@ export default {
       maxlength: 5,
       selectedLength: 3,
       pw: null,
+      startTimestamp: null,
+      lastAttemptTimestamp: null,
       attempts: null,
       stage: null,
       isValid: false
     }
   },
 
-  created () {
-    this.restart()
-  },
-
   watch: {
-    selectedLength () {
-      this.restart()
+    selectedLength: {
+      handler () {
+        this.restart()
+      },
+      immediate: true
     },
 
     stage () {
       this.validate()
+    },
+
+    attempts () {
+      if (this.attempts.length === 1) {
+        this.startTimestamp = Date.now()
+      }
+    },
+
+    isWinner () {
+      this.$ga.event('game', 'win', undefined, this.attempts.length)
+      this.$ga.time('game', 'win', Date.now() - this.startTimestamp)
     }
   },
 
@@ -72,13 +84,22 @@ export default {
 
   methods: {
     restart () {
+      if (this.attempts != null) {
+        this.$ga.event('game', 'restart', undefined, this.attempts.length, Date.now() - this.startTimestamp)
+      }
+
       this.pw = createPassword(this.selectedLength)
       this.attempts = []
       this.stage = ''
+      this.lastAttemptTimestamp = Date.now()
+
+      this.$ga.set(`dimension${this.selectedLength}`, `difficulty-${this.selectedLength}`)
     },
 
     submit () {
       this.attempts = makeAttempt(this.pw, this.attempts, this.solution)
+
+      this.$ga.event('game', 'attempt', `attempt-${this.attempts.length}`, Date.now() - this.lastAttemptTimestamp)
     },
 
     validate () {
