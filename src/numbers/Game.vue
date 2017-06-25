@@ -85,7 +85,8 @@ export default {
   methods: {
     restart () {
       if (this.attempts != null) {
-        this.$ga.event('game', 'restart', undefined, this.attempts.length, Date.now() - this.startTimestamp)
+        this.$ga.event('game', 'restart', undefined, this.attempts.length)
+        this.$ga.time('game', 'restart', Date.now() - this.startTimestamp)
       }
 
       this.pw = createPassword(this.selectedLength)
