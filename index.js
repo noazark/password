@@ -1,25 +1,32 @@
-const randomInt = require('random-int')
+import randomInt from 'random-int'
 
-const VALID = exports.VALID = 'valid'
-const MATCH = exports.MATCH = 'match'
-const CORRECT = exports.CORRECT = 'correct'
-const INCORRECT = exports.INCORRECT = 'incorrect'
+export const VALID = 'valid'
+export const MATCH = 'match'
+export const CORRECT = 'correct'
+export const INCORRECT = 'incorrect'
 
-exports.createPassword = function (len) {
+export function createPassword (len, values = 10) {
   const pw = []
 
-  for (i=len; i > 0; i--) {
-    pw.push(Number(randomInt(0,9)))
+  for (let i = len; i > 0; i--) {
+    pw.push(Number(randomInt(0, values - 1)))
   }
 
   return pw
 }
 
-exports.test = function (pw, solution) {
+export function validate (pw, solution) {
+  const hasCorrectLength = pw.length === solution.length
+  const hasOnlyIntegers = solution.every(el => Number.isInteger(el))
+
+  return hasCorrectLength && hasOnlyIntegers
+}
+
+export function test (pw, solution) {
   const _pw = new Set(pw)
   const _solution = new Set(solution)
 
-  const isValid = pw.length === solution.length && solution.every(el => Number.isInteger(el))
+  const isValid = validate(pw, solution)
 
   if (isValid === false) {
     return {
@@ -37,4 +44,12 @@ exports.test = function (pw, solution) {
     [CORRECT]: corrects.length,
     [INCORRECT]: incorrects.length
   }
+}
+
+export function makeAttempt (pw, attempts, solution) {
+  return [...attempts, {solution, test: test(pw, solution)}]
+}
+
+export function hasWinningAttempt (pw, attempts) {
+  return attempts.some(attempt => attempt.test.match === pw.length)
 }
