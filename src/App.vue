@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{fullscreen: isFullscreen}">
     <game></game>
   </div>
 </template>
@@ -12,6 +12,12 @@ export default {
   components: {
     Game,
     Distribution
+  },
+
+  computed: {
+    isFullscreen () {
+      return (screen.availHeight || screen.height - 30) <= window.innerHeight
+    }
   }
 }
 </script>
@@ -19,5 +25,9 @@ export default {
 <style>
 body {
   background-color: #68667B;
+}
+
+.fullscreen {
+  margin-top: 2rem;
 }
 </style>
