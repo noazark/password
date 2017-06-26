@@ -41,11 +41,20 @@ export function test (pw, solution) {
 
     if (el0 === el1) {
       score[i] = solutionClone[i] = MATCH
-      MATCH
-    } else if (solutionClone.includes(el0)) {
+    }
+  }
+
+  for (let i in pw) {
+    const el0 = pw[i]
+
+    if (score[i] !== MATCH && score[i] !== CORRECT && solutionClone.includes(el0)) {
       const idx = solutionClone.indexOf(el0)
       score[i] = solutionClone[idx] = CORRECT
-    } else {
+    }
+  }
+
+  for (let i in pw) {
+    if (score[i] !== MATCH && score[i] !== CORRECT) {
       score[i] = solutionClone[i] = PASS
     }
   }

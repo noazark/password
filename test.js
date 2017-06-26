@@ -103,6 +103,14 @@ describe('test', () => {
     expect(test(pw, s)).toMatchObject(e)
   })
 
+  it('duplicates are hard', () => {
+    const pw = [0, 2, 0]
+    const s = [7, 2, 0]
+    const e = {[VALID]: true, [SCORE]: [PASS, MATCH, MATCH]}
+
+    expect(test(pw, s)).toMatchObject(e)
+  })
+
   it('even works with arbitrarily long passwords', () => {
     const pw = [5, 8, 2, 3, 1, 5, 9, 8]
     const s = [2, 8, 7, 7, 1, 1, 5, 7]
