@@ -16,11 +16,11 @@ export default {
 
   computed: {
     matchCount () {
-      return getCount(MATCH, this.attempt.test.score)
+      return getCount(MATCH, this.attempt)
     },
 
     correctCount () {
-      return getCount(CORRECT, this.attempt.test.score)
+      return getCount(CORRECT, this.attempt)
     }
   },
 

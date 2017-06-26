@@ -56,8 +56,8 @@ export function test (pw, solution) {
   }
 }
 
-export function getCount (mark, score) {
-  return score.filter(el => el === mark).length
+export function getCount (mark, attempt) {
+  return attempt.test[SCORE].filter(el => el === mark).length
 }
 
 export function makeAttempt (pw, attempts, solution) {
@@ -65,5 +65,5 @@ export function makeAttempt (pw, attempts, solution) {
 }
 
 export function hasWinningAttempt (pw, attempts) {
-  return attempts.some(attempt => getCount(MATCH, attempt.test[SCORE]) === pw.length)
+  return attempts.some(attempt => getCount(MATCH, attempt) === pw.length)
 }
