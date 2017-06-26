@@ -43,8 +43,7 @@ export default {
       startTimestamp: null,
       lastAttemptTimestamp: null,
       attempts: null,
-      stage: null,
-      isValid: false
+      stage: null
     }
   },
 
@@ -79,6 +78,18 @@ export default {
 
     solution () {
       return this.stage.split('').map(el => Number(el))
+    },
+
+    isValid () {
+      const pw = this.pw
+      const solution = this.solution
+      const attempts = this.attempts
+
+      const isValid = () => validate(pw, solution)
+      const isFirst = () => attempts == null || attempts.length === 0
+      const isNew = () => this.solution.join('') !== attempts[attempts.length - 1].solution.join('')
+
+      return isValid() && (isFirst() || isNew())
     }
   },
 
@@ -101,10 +112,6 @@ export default {
       this.attempts = makeAttempt(this.pw, this.attempts, this.solution)
 
       this.$ga.event('game', 'attempt', `attempt-${this.attempts.length}`, Date.now() - this.lastAttemptTimestamp)
-    },
-
-    validate () {
-      this.isValid = validate(this.pw, this.solution)
     }
   }
 }

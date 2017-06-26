@@ -117,14 +117,14 @@ describe('test', () => {
 
 describe('getCount', () => {
   it('all matches', () => {
-    expect(getCount(MATCH, [MATCH, MATCH, MATCH])).toBe(3)
+    expect(getCount(MATCH, {test: {score: [MATCH, MATCH, MATCH]}})).toBe(3)
   })
 
   it('single match', () => {
-    expect(getCount(MATCH, [PASS, MATCH, CORRECT])).toBe(1)
+    expect(getCount(MATCH, {test: {score: [PASS, MATCH, CORRECT]}})).toBe(1)
   })
 
   it('none match', () => {
-    expect(getCount(MATCH, [PASS, CORRECT, PASS])).toBe(0)
+    expect(getCount(MATCH, {test: {score: [PASS, CORRECT, PASS]}})).toBe(0)
   })
 })
