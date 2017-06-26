@@ -125,6 +125,6 @@ describe('getCount', () => {
   })
 
   it('none match', () => {
-    expect(getCount(CORRECT, [PASS, MATCH, PASS])).toBe(0)
+    expect(getCount(MATCH, [PASS, CORRECT, PASS])).toBe(0)
   })
 })
