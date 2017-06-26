@@ -20,7 +20,7 @@ Vue.use(VueAnalytics, {
   // debug: {
   //   enabled: true,
   //   trace: false,
-  //   sendHitTask: true
+  //   sendHitTask: false
   // },
   onReady () {
     store.ready = true

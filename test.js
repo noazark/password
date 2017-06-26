@@ -1,5 +1,10 @@
-const {createPassword, test, validate} = require('./')
-const {VALID, MATCH, CORRECT, INCORRECT} = require('./')
+const {
+  createPassword,
+  test,
+  validate,
+  getCount
+} = require('./')
+const {VALID, SCORE, MATCH, CORRECT, PASS} = require('./')
 
 describe('createPassword', () => {
   it('given length', () => {
@@ -68,42 +73,58 @@ describe('test', () => {
 
   it('solution must only include integers', () => {
     const pw = [1, 2, 3]
+    const s = [1, 2, '3']
+    const e = {[VALID]: false}
 
-    let s, e
-
-    s = [1, 2, '3']
-    e = {[VALID]: false}
     expect(test(pw, s)).toMatchObject(e)
   })
 
   it('perfect solution', () => {
     const pw = [1, 2, 3]
+    const s = [1, 2, 3]
+    const e = {[VALID]: true, [SCORE]: [MATCH, MATCH, MATCH]}
 
-    let s, e
-
-    // perfect
-    s = [1, 2, 3]
-    e = {[VALID]: true, [MATCH]: 3, [CORRECT]: 3, [INCORRECT]: 0}
     expect(test(pw, s)).toMatchObject(e)
+  })
 
-    // duplicates are counted once
-    s = [1, 4, 4]
-    e = {[VALID]: true, [MATCH]: 1, [CORRECT]: 1, [INCORRECT]: 1}
+  it('solution correctness', () => {
+    const pw = [1, 2, 3]
+    const s = [2, 1, 3]
+    const e = {[VALID]: true, [SCORE]: [CORRECT, CORRECT, MATCH]}
+
     expect(test(pw, s)).toMatchObject(e)
+  })
 
-    // correctness
-    s = [2, 1, 3]
-    e = {[VALID]: true, [MATCH]: 1, [CORRECT]: 3, [INCORRECT]: 0}
+  it('duplicates', () => {
+    const pw = [1, 2, 3]
+    const s = [1, 1, 4]
+    const e = {[VALID]: true, [SCORE]: [MATCH, PASS, PASS]}
+
     expect(test(pw, s)).toMatchObject(e)
   })
 
   it('even works with arbitrarily long passwords', () => {
     const pw = [5, 8, 2, 3, 1, 5, 9, 8]
+    const s = [2, 8, 7, 7, 1, 1, 5, 7]
+    const e = {
+      [VALID]: true,
+      [SCORE]: [CORRECT, MATCH, CORRECT, PASS, MATCH, PASS, PASS, PASS]
+    }
 
-    let s, e
-
-    s = [2, 8, 7, 7, 1, 1, 5, 7]
-    e = {[VALID]: true, [MATCH]: 2, [CORRECT]: 4, [INCORRECT]: 1}
     expect(test(pw, s)).toMatchObject(e)
+  })
+})
+
+describe('getCount', () => {
+  it('all matches', () => {
+    expect(getCount(MATCH, [MATCH, MATCH, MATCH])).toBe(3)
+  })
+
+  it('single match', () => {
+    expect(getCount(MATCH, [PASS, MATCH, CORRECT])).toBe(1)
+  })
+
+  it('none match', () => {
+    expect(getCount(CORRECT, [PASS, MATCH, PASS])).toBe(0)
   })
 })

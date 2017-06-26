@@ -21,7 +21,7 @@
 
 
     <ul class="attempts">
-      <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :pw="pw" :attempt="attempt" :assist="isWinner"></li>
+      <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :attempt="attempt" :assist="isWinner"></li>
     </ul>
   </div>
 </template>

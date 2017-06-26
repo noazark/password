@@ -1,9 +1,10 @@
 import randomInt from 'random-int'
 
 export const VALID = 'valid'
+export const SCORE = 'score'
 export const MATCH = 'match'
 export const CORRECT = 'correct'
-export const INCORRECT = 'incorrect'
+export const PASS = 'pass'
 
 export function createPassword (len, values = 10) {
   const pw = []
@@ -23,9 +24,6 @@ export function validate (pw, solution) {
 }
 
 export function test (pw, solution) {
-  const _pw = new Set(pw)
-  const _solution = new Set(solution)
-
   const isValid = validate(pw, solution)
 
   if (isValid === false) {
@@ -34,16 +32,32 @@ export function test (pw, solution) {
     }
   }
 
-  const matches = solution.filter((i, idx) => pw[idx] === i)
-  const corrects = [..._solution].filter(x => _pw.has(x))
-  const incorrects = [..._solution].filter(x => !_pw.has(x))
+  const score = pw.slice()
+  const solutionClone = solution.slice()
+
+  for (let i in pw) {
+    const el0 = pw[i]
+    const el1 = solution[i]
+
+    if (el0 === el1) {
+      score[i] = solutionClone[i] = MATCH
+      MATCH
+    } else if (solutionClone.includes(el0)) {
+      const idx = solutionClone.indexOf(el0)
+      score[i] = solutionClone[idx] = CORRECT
+    } else {
+      score[i] = solutionClone[i] = PASS
+    }
+  }
 
   return {
     [VALID]: isValid,
-    [MATCH]: matches.length,
-    [CORRECT]: corrects.length,
-    [INCORRECT]: incorrects.length
+    [SCORE]: score
   }
+}
+
+export function getCount (mark, score) {
+  return score.filter(el => el === mark).length
 }
 
 export function makeAttempt (pw, attempts, solution) {
@@ -51,5 +65,5 @@ export function makeAttempt (pw, attempts, solution) {
 }
 
 export function hasWinningAttempt (pw, attempts) {
-  return attempts.some(attempt => attempt.test.match === pw.length)
+  return attempts.some(attempt => getCount(MATCH, attempt.test[SCORE]) === pw.length)
 }

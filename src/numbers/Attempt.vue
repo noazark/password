@@ -1,24 +1,36 @@
 <template lang="html">
   <div>
-    <span :class="[{correct: !isMatch(el, i) && isCorrect(el), match: isMatch(el, i)}, 'part']" v-for="el, i in attempt.solution">{{el}}</span>
+    <span :class="[{correct: !isMatch(el, i) && isCorrect(el, i), match: isMatch(el, i)}, 'part']" v-for="el, i in attempt.solution">{{el}}</span>
     <div :class="['hint', {assist}]">
-      <span class="match">{{attempt.test.match}}</span>
-      <span class="correct">{{attempt.test.correct}}</span>
+      <span class="match">{{matchCount}}</span>
+      <span class="correct">{{correctCount}}</span>
     </div>
   </div>
 </template>
 
 <script>
+import {getCount, MATCH, CORRECT, SCORE} from '../../index'
+
 export default {
-  props: ['attempt', 'pw', 'assist'],
+  props: ['attempt', 'assist'],
+
+  computed: {
+    matchCount () {
+      return getCount(MATCH, this.attempt.test.score)
+    },
+
+    correctCount () {
+      return getCount(CORRECT, this.attempt.test.score)
+    }
+  },
 
   methods: {
     isMatch (el, i) {
-      return this.assist && this.pw[i] === el
+      return this.assist && this.attempt.test[SCORE][i] === MATCH
     },
 
-    isCorrect (el) {
-      return this.assist && this.pw.includes(el)
+    isCorrect (el, i) {
+      return this.assist && this.attempt.test[SCORE][i] === CORRECT
     }
   }
 }
