@@ -47,7 +47,7 @@ export function test (pw, solution) {
   for (let i in pw) {
     const el0 = pw[i]
 
-    if (score[i] !== MATCH && score[i] !== CORRECT && solutionClone.includes(el0)) {
+    if (score[i] !== MATCH && solutionClone.includes(el0)) {
       const idx = solutionClone.indexOf(el0)
       score[i] = solutionClone[idx] = CORRECT
     }
@@ -55,13 +55,17 @@ export function test (pw, solution) {
 
   for (let i in pw) {
     if (score[i] !== MATCH && score[i] !== CORRECT) {
-      score[i] = solutionClone[i] = PASS
+      score[i] = PASS
+    }
+
+    if (solutionClone[i] !== MATCH && solutionClone[i] !== CORRECT) {
+      solutionClone[i] = PASS
     }
   }
 
   return {
     [VALID]: isValid,
-    [SCORE]: score
+    [SCORE]: solutionClone
   }
 }
 

@@ -104,9 +104,15 @@ describe('test', () => {
   })
 
   it('duplicates are hard', () => {
-    const pw = [0, 2, 0]
-    const s = [7, 2, 0]
-    const e = {[VALID]: true, [SCORE]: [PASS, MATCH, MATCH]}
+    let pw, s, e
+    pw = [0, 2, 0]
+    s = [7, 2, 0]
+    e = {[VALID]: true, [SCORE]: [PASS, MATCH, MATCH]}
+
+    expect(test(pw, s)).toMatchObject(e)
+    pw = [1, 4, 2]
+    s = [1, 2, 3]
+    e = {[VALID]: true, [SCORE]: [MATCH, CORRECT, PASS]}
 
     expect(test(pw, s)).toMatchObject(e)
   })
@@ -116,7 +122,7 @@ describe('test', () => {
     const s = [2, 8, 7, 7, 1, 1, 5, 7]
     const e = {
       [VALID]: true,
-      [SCORE]: [CORRECT, MATCH, CORRECT, PASS, MATCH, PASS, PASS, PASS]
+      [SCORE]: [CORRECT, MATCH, PASS, PASS, MATCH, PASS, CORRECT, PASS]
     }
 
     expect(test(pw, s)).toMatchObject(e)
