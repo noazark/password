@@ -55,10 +55,6 @@ export default {
       immediate: true
     },
 
-    stage () {
-      this.validate()
-    },
-
     attempts () {
       if (this.attempts.length === 1) {
         this.startTimestamp = Date.now()
