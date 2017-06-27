@@ -36,6 +36,7 @@ export default {
   mutations: {
     ATTEMPT (state) {
       state.attempts = makeAttempt(state.pw, state.attempts, state.stage)
+      state.stage = []
 
       if (state.attempts.length === 1) {
         state.startTimestamp = Date.now()
