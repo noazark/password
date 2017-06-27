@@ -196,7 +196,7 @@ export default {
 }
 
 .instructions > li {
-  margin: 0.75rem 0;
+  margin-bottom: 0.75rem;
 }
 
 </style>
