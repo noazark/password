@@ -22,6 +22,12 @@
     <ul class="attempts">
       <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :attempt="attempt" :assist="isWinner"></li>
     </ul>
+
+    <ul class="instructions" v-if="attempts.length === 0">
+      <li>Guess the {{pw.length}} digit password</li>
+      <li>Hints are given with each guess</li>
+      <li>Reset for a new password</li>
+    </ul>
   </div>
 </template>
 
@@ -172,12 +178,25 @@ export default {
   text-decoration: none;
 }
 
-.attempts {
+.attempts,
+.instructions {
   padding: 0;
   margin-top: 0;
 }
 
-.attempts > li {
+.attempts > li,
+.instructions > li {
   list-style:none;
 }
+
+.instructions {
+  color: #E4E4E4;
+  font-family: monospace;
+  font-size: 1.2rem;
+}
+
+.instructions > li {
+  margin: 0.75rem 0;
+}
+
 </style>
