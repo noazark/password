@@ -4,7 +4,7 @@ const {
   validate,
   getCount
 } = require('./')
-const {VALID, SCORE, MATCH, CORRECT, PASS} = require('./')
+const {VALID, SCORE, MATCH, CLOSE_MATCH, PASS} = require('./')
 
 describe('createPassword', () => {
   it('given length', () => {
@@ -87,10 +87,10 @@ describe('test', () => {
     expect(test(pw, s)).toMatchObject(e)
   })
 
-  it('solution correctness', () => {
+  it('solution close matches', () => {
     const pw = [1, 2, 3]
     const s = [2, 1, 3]
-    const e = {[VALID]: true, [SCORE]: [CORRECT, CORRECT, MATCH]}
+    const e = {[VALID]: true, [SCORE]: [CLOSE_MATCH, CLOSE_MATCH, MATCH]}
 
     expect(test(pw, s)).toMatchObject(e)
   })
@@ -112,7 +112,7 @@ describe('test', () => {
     expect(test(pw, s)).toMatchObject(e)
     pw = [1, 4, 2]
     s = [1, 2, 3]
-    e = {[VALID]: true, [SCORE]: [MATCH, CORRECT, PASS]}
+    e = {[VALID]: true, [SCORE]: [MATCH, CLOSE_MATCH, PASS]}
 
     expect(test(pw, s)).toMatchObject(e)
   })
@@ -122,7 +122,7 @@ describe('test', () => {
     const s = [2, 8, 7, 7, 1, 1, 5, 7]
     const e = {
       [VALID]: true,
-      [SCORE]: [CORRECT, MATCH, PASS, PASS, MATCH, PASS, CORRECT, PASS]
+      [SCORE]: [CLOSE_MATCH, MATCH, PASS, PASS, MATCH, PASS, CLOSE_MATCH, PASS]
     }
 
     expect(test(pw, s)).toMatchObject(e)
@@ -135,10 +135,10 @@ describe('getCount', () => {
   })
 
   it('single match', () => {
-    expect(getCount(MATCH, {test: {score: [PASS, MATCH, CORRECT]}})).toBe(1)
+    expect(getCount(MATCH, {test: {score: [PASS, MATCH, CLOSE_MATCH]}})).toBe(1)
   })
 
   it('none match', () => {
-    expect(getCount(MATCH, {test: {score: [PASS, CORRECT, PASS]}})).toBe(0)
+    expect(getCount(MATCH, {test: {score: [PASS, CLOSE_MATCH, PASS]}})).toBe(0)
   })
 })

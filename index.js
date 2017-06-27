@@ -3,7 +3,7 @@ import randomInt from 'random-int'
 export const VALID = 'valid'
 export const SCORE = 'score'
 export const MATCH = 'match'
-export const CORRECT = 'correct'
+export const CLOSE_MATCH = 'close-match'
 export const PASS = 'pass'
 
 export function createPassword (len, values = 10) {
@@ -49,16 +49,16 @@ export function test (pw, solution) {
 
     if (score[i] !== MATCH && solutionClone.includes(el0)) {
       const idx = solutionClone.indexOf(el0)
-      score[i] = solutionClone[idx] = CORRECT
+      score[i] = solutionClone[idx] = CLOSE_MATCH
     }
   }
 
   for (let i in pw) {
-    if (score[i] !== MATCH && score[i] !== CORRECT) {
+    if (score[i] !== MATCH && score[i] !== CLOSE_MATCH) {
       score[i] = PASS
     }
 
-    if (solutionClone[i] !== MATCH && solutionClone[i] !== CORRECT) {
+    if (solutionClone[i] !== MATCH && solutionClone[i] !== CLOSE_MATCH) {
       solutionClone[i] = PASS
     }
   }
