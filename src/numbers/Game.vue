@@ -26,7 +26,7 @@
     <ul class="instructions" v-if="attempts.length === 0">
       <li>Guess the {{pw.length}} digit password</li>
       <li>Hints are given with each guess</li>
-      <li>Reset for a new password</li>
+      <li>Restart for a new password</li>
     </ul>
   </div>
 </template>
