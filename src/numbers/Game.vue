@@ -1,7 +1,7 @@
 <template>
   <div class="game">
     <p class="password">
-      <a href="" :class="['part', {active: n <= pw.length}]" @click.prevent="selectedLength = n" v-for="n in maxlength">*</a>
+      <a href="" :class="['part', {active: n <= pw.length}]" @click.prevent="setDifficulty(n)" v-for="n in maxlength">*</a>
       <br>
       <a href="" class="restart" @click.prevent="restart">restart</a>
     </p>
@@ -9,7 +9,7 @@
     <div class="stage">
       <template v-if="!isWinner">
         <form @submit.prevent="submit">
-          <input autofocus inputmode="numeric" pattern="[0-9]*" :size="maxlength+1" :maxlength="pw.length" v-model="stage"></input>
+          <input autofocus inputmode="numeric" pattern="[0-9]*" :size="maxlength+1" :maxlength="pw.length" @input="setStage($event.target.value.split('').map(el => Number(el)))" :value="stage.join('')"></input>
           <br>
           <button class="stage-submit" :disabled="!isValid">submit</button>
         </form>
@@ -19,7 +19,6 @@
       </template>
     </div>
 
-
     <ul class="attempts">
       <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :attempt="attempt" :assist="isWinner"></li>
     </ul>
@@ -28,87 +27,70 @@
 
 <script>
 import Attempt from './Attempt.vue'
-import {createPassword, hasWinningAttempt, makeAttempt, validate} from '../../index'
+import {mapActions, mapGetters, mapState} from 'vuex'
 
 export default {
   components: {
     Attempt
   },
 
-  data () {
-    return {
-      maxlength: 5,
-      selectedLength: 3,
-      pw: null,
-      startTimestamp: null,
-      lastAttemptTimestamp: null,
-      attempts: null,
-      stage: null
-    }
-  },
-
   watch: {
     selectedLength: {
       handler () {
         this.restart()
+
+        // Artificially delay this event until after other watchers. This is so
+        // the restart event will be triggered before a change in dimension.
+        setTimeout(() => {
+          this.$ga.set(`dimension${this.selectedLength}`, `difficulty-${this.selectedLength}`)
+        })
       },
       immediate: true
     },
 
     attempts () {
-      if (this.attempts.length === 1) {
-        this.startTimestamp = Date.now()
-      }
-    },
-
-    isWinner () {
-      this.$ga.event('game', 'win', undefined, this.attempts.length)
-      this.$ga.time('game', 'win', Date.now() - this.startTimestamp)
-    }
-  },
-
-  computed: {
-    isWinner () {
-      return hasWinningAttempt(this.pw, this.attempts)
-    },
-
-    solution () {
-      return this.stage.split('').map(el => Number(el))
-    },
-
-    isValid () {
-      const pw = this.pw
-      const solution = this.solution
-      const attempts = this.attempts
-
-      const isValid = () => validate(pw, solution)
-      const isFirst = () => attempts == null || attempts.length === 0
-      const isNew = () => this.solution.join('') !== attempts[attempts.length - 1].solution.join('')
-
-      return isValid() && (isFirst() || isNew())
-    }
-  },
-
-  methods: {
-    restart () {
-      if (this.attempts != null) {
+      if (this.attempts.length === 0) {
         this.$ga.event('game', 'restart', undefined, this.attempts.length)
         this.$ga.time('game', 'restart', Date.now() - this.startTimestamp)
       }
 
-      this.pw = createPassword(this.selectedLength)
-      this.attempts = []
-      this.stage = ''
-      this.lastAttemptTimestamp = Date.now()
-
-      this.$ga.set(`dimension${this.selectedLength}`, `difficulty-${this.selectedLength}`)
+      if (this.attempts.length > 0) {
+        this.$ga.event('game', 'attempt', `attempt-${this.attempts.length}`, Date.now() - this.lastAttemptTimestamp)
+      }
     },
 
-    submit () {
-      this.attempts = makeAttempt(this.pw, this.attempts, this.solution)
-
-      this.$ga.event('game', 'attempt', `attempt-${this.attempts.length}`, Date.now() - this.lastAttemptTimestamp)
+    isWinner (val) {
+      if (val === true) {
+        this.$ga.event('game', 'win', undefined, this.attempts.length)
+        this.$ga.time('game', 'win', Date.now() - this.startTimestamp)
+      }
     }
+  },
+
+  computed: {
+    ...mapState([
+      'maxlength',
+      'selectedLength',
+      'pw',
+      'startTimestamp',
+      'lastAttemptTimestamp',
+      'attempts',
+      'stage'
+    ]),
+
+    ...mapGetters([
+      'isWinner',
+      'isValid'
+    ])
+  },
+
+  methods: {
+    ...mapActions([
+      'restart',
+      'setDifficulty',
+      'setStage',
+      'submit'
+    ])
   }
 }
 </script>

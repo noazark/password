@@ -3,10 +3,12 @@ import App from './App'
 import VueAnalytics from 'vue-analytics'
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
+import Vuex from 'vuex'
+import Store from './store'
 
 Vue.config.productionTip = false
 
-const store = {
+const data = {
   ready: false
 }
 
@@ -15,6 +17,7 @@ Raven
   .addPlugin(RavenVue, Vue)
   .install()
 
+Vue.use(Vuex)
 Vue.use(VueAnalytics, {
   id: 'UA-78783837-2',
   // debug: {
@@ -23,13 +26,16 @@ Vue.use(VueAnalytics, {
   //   sendHitTask: false
   // },
   onReady () {
-    store.ready = true
+    data.ready = true
   }
 })
+
+const store = new Vuex.Store(Store)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   render: h => h(App),
-  data: store
+  data,
+  store
 })
