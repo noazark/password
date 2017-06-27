@@ -19,11 +19,10 @@
       </template>
     </div>
 
-    <ul class="attempts">
+    <ul class="attempts" v-if="attempts.length > 0">
       <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :attempt="attempt" :assist="isWinner"></li>
     </ul>
-
-    <ul class="instructions" v-if="attempts.length === 0">
+    <ul class="instructions" v-else>
       <li>Guess the {{pw.length}} digit password</li>
       <li>Hints are given with each guess</li>
       <li>Restart for a new password</li>
