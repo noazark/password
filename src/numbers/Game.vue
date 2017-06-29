@@ -20,7 +20,7 @@
     </div>
 
     <ul class="attempts" v-if="attempts.length > 0">
-      <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :attempt="attempt" :assist="isWinner"></li>
+      <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :number="attempts.length - i" :attempt="attempt" :assist="isWinner"></li>
     </ul>
     <ul class="instructions" v-else>
       <li>Guess the {{pw.length}} digit password</li>
@@ -108,6 +108,7 @@ export default {
   padding: 0 1rem;
   text-align: center;
   justify-content: flex-start;
+  width: 100%;
 }
 
 .password, .stage, .attempts {
@@ -181,6 +182,7 @@ export default {
 .instructions {
   padding: 0;
   margin-top: 0;
+  width: 100%;
 }
 
 .attempts > li,
@@ -197,5 +199,4 @@ export default {
 .instructions > li {
   margin-bottom: 0.75rem;
 }
-
 </style>

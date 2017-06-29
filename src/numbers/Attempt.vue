@@ -1,7 +1,12 @@
 <template lang="html">
-  <div>
-    <span :class="[{'close-match': !isMatch(el, i) && isCorrect(el, i), match: isMatch(el, i)}, 'part']" v-for="el, i in attempt.solution">{{el}}</span>
-    <div :class="['hint', {assist}]">
+  <div class="self">
+    <div :class="['hint', 'text-right', {assist}]">
+      <span class="number" v-if="assist">#{{number}}</span>
+    </div>
+    <div class="parts">
+      <span :class="[{'close-match': !isMatch(el, i) && isCorrect(el, i), match: isMatch(el, i)}, 'part']" v-for="el, i in attempt.solution">{{el}}</span>
+    </div>
+    <div :class="['hint', 'text-left', {assist}]">
       <span class="match">{{matchCount}}</span>
       <span class="close-match">{{closeMatchCount}}</span>
     </div>
@@ -12,7 +17,7 @@
 import {getCount, MATCH, CLOSE_MATCH, SCORE} from '../../index'
 
 export default {
-  props: ['attempt', 'assist'],
+  props: ['number', 'attempt', 'assist'],
 
   computed: {
     matchCount () {
@@ -37,7 +42,18 @@ export default {
 </script>
 
 <style scoped>
-.part, .match, .close-match {
+.self {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  width: 100%;
+}
+
+.part,
+.number,
+.match,
+.close-match {
   color: #E4E4E4;
   display: inline;
   font-family: monospace;
@@ -52,14 +68,21 @@ export default {
   opacity: 1;
 }
 
-.match, .close-match {
+.number,
+.match,
+.close-match {
   font-weight: bold;
   font-size: 2rem;
 }
 
+.assist .number,
 .assist .match,
 .assist .close-match {
   opacity: 0.5;
+}
+
+.number {
+  color: rgba(255, 255, 255, 0.15);
 }
 
 .match {
@@ -71,13 +94,14 @@ export default {
 }
 
 .hint {
-  display: inline-block;
+  width: 100%;
+}
 
-  /* hack to ignore width of this element and allow
-   * flexbox to center everything else
-   */
-  overflow: visible;
-  white-space: nowrap;
-  width: 0;
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
 }
 </style>
