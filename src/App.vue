@@ -1,30 +1,28 @@
 <template>
-  <div id="app" :class="{fullscreen: isFullscreen}">
-    <game v-if="$root.ready"></game>
+  <div id="app" :class="{ fullscreen: isFullscreen }">
+    <game></game>
   </div>
 </template>
 
 <script>
-import Distribution from './components/Distribution.vue'
-import Game from './numbers/Game.vue'
+import Game from "./numbers/Game.vue";
 
 export default {
   components: {
-    Game,
-    Distribution
+    Game
   },
 
   computed: {
-    isFullscreen () {
-      return (screen.availHeight || screen.height - 30) <= window.innerHeight
+    isFullscreen() {
+      return (screen.availHeight || screen.height - 30) <= window.innerHeight;
     }
   }
-}
+};
 </script>
 
 <style>
 body {
-  background-color: #68667B;
+  background-color: #68667b;
 }
 
 .fullscreen {

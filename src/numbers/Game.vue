@@ -1,16 +1,33 @@
 <template>
   <div class="game">
     <p class="password">
-      <a href="" :class="['part', {active: n <= pw.length}]" @click.prevent="setDifficulty(n)" v-for="n in maxlength">*</a>
-      <br>
+      <a
+        href=""
+        :class="['part', { active: n <= pw.length }]"
+        @click.prevent="setDifficulty(n)"
+        v-for="n in maxlength"
+        :key="n"
+        >*</a
+      >
+      <br />
       <a href="" class="restart" @click.prevent="restart">restart</a>
     </p>
 
     <div class="stage">
       <template v-if="!isWinner">
         <form @submit.prevent="submit">
-          <input autofocus inputmode="numeric" pattern="[0-9]*" :size="maxlength+1" :maxlength="pw.length" @input="setStage($event.target.value.split('').map(el => Number(el)))" :value="stage.join('')"></input>
-          <br>
+          <input
+            autofocus
+            inputmode="numeric"
+            pattern="[0-9]*"
+            :size="maxlength + 1"
+            :maxlength="pw.length"
+            @input="
+              setStage($event.target.value.split('').map(el => Number(el)))
+            "
+            :value="stage.join('')"
+          />
+          <br />
           <button class="stage-submit" :disabled="!isValid">submit</button>
         </form>
       </template>
@@ -20,10 +37,17 @@
     </div>
 
     <ul class="attempts" v-if="attempts.length > 0">
-      <li is="attempt" class="attempt" v-for="attempt, i in attempts.slice().reverse()" :number="attempts.length - i" :attempt="attempt" :assist="isWinner"></li>
+      <attempt
+        class="attempt"
+        v-for="(attempt, i) in attempts.slice().reverse()"
+        :key="i"
+        :number="attempts.length - i"
+        :attempt="attempt"
+        :assist="isWinner"
+      ></attempt>
     </ul>
     <ul class="instructions" v-else>
-      <li>Guess the {{pw.length}} digit password</li>
+      <li>Guess the {{ pw.length }} digit password</li>
       <li>Hints are given with each guess</li>
       <li>Restart for a new password</li>
     </ul>
@@ -31,8 +55,8 @@
 </template>
 
 <script>
-import Attempt from './Attempt.vue'
-import {mapActions, mapGetters, mapState} from 'vuex'
+import Attempt from "./Attempt.vue";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   components: {
@@ -41,63 +65,31 @@ export default {
 
   watch: {
     selectedLength: {
-      handler () {
-        this.restart()
-
-        // Artificially delay this event until after other watchers. This is so
-        // the restart event will be triggered before a change in dimension.
-        setTimeout(() => {
-          this.$ga.set(`dimension${this.selectedLength}`, `difficulty-${this.selectedLength}`)
-        })
+      handler() {
+        this.restart();
       },
       immediate: true
-    },
-
-    attempts () {
-      if (this.attempts.length === 0) {
-        this.$ga.event('game', 'restart', undefined, this.attempts.length)
-        this.$ga.time('game', 'restart', Date.now() - this.startTimestamp)
-      }
-
-      if (this.attempts.length > 0) {
-        this.$ga.event('game', 'attempt', `attempt-${this.attempts.length}`, Date.now() - this.lastAttemptTimestamp)
-      }
-    },
-
-    isWinner (val) {
-      if (val === true) {
-        this.$ga.event('game', 'win', undefined, this.attempts.length)
-        this.$ga.time('game', 'win', Date.now() - this.startTimestamp)
-      }
     }
   },
 
   computed: {
     ...mapState([
-      'maxlength',
-      'selectedLength',
-      'pw',
-      'startTimestamp',
-      'lastAttemptTimestamp',
-      'attempts',
-      'stage'
+      "maxlength",
+      "selectedLength",
+      "pw",
+      "startTimestamp",
+      "lastAttemptTimestamp",
+      "attempts",
+      "stage"
     ]),
 
-    ...mapGetters([
-      'isWinner',
-      'isValid'
-    ])
+    ...mapGetters(["isWinner", "isValid"])
   },
 
   methods: {
-    ...mapActions([
-      'restart',
-      'setDifficulty',
-      'setStage',
-      'submit'
-    ])
+    ...mapActions(["restart", "setDifficulty", "setStage", "submit"])
   }
-}
+};
 </script>
 
 <style scoped>
@@ -111,7 +103,9 @@ export default {
   width: 100%;
 }
 
-.password, .stage, .attempts {
+.password,
+.stage,
+.attempts {
   margin-bottom: 2rem;
 }
 
@@ -132,16 +126,16 @@ export default {
 }
 
 .password > .part.active {
-  color: #E4E4E4;
+  color: #e4e4e4;
 }
 
 .stage input {
   background-color: rgba(255, 255, 255, 0.08);
-  border-bottom: 3px solid #E4E4E4;
+  border-bottom: 3px solid #e4e4e4;
   border-radius: 0;
   border: 0;
   box-sizing: border-box;
-  color: #E4E4E4;
+  color: #e4e4e4;
   font-family: monospace;
   font-size: 4rem;
   height: 68px;
@@ -156,7 +150,7 @@ export default {
 .stage-submit {
   background-color: rgba(255, 255, 255, 0.2);
   border: 0;
-  color: #9DD29A;
+  color: #9dd29a;
   font-family: monospace;
   font-size: 2rem;
   margin: 0;
@@ -171,7 +165,7 @@ export default {
 
 .part {
   box-sizing: border-box;
-  color: #E4E4E4;
+  color: #e4e4e4;
   display: inline;
   font-family: monospace;
   font-size: 4rem;
@@ -187,11 +181,11 @@ export default {
 
 .attempts > li,
 .instructions > li {
-  list-style:none;
+  list-style: none;
 }
 
 .instructions {
-  color: #E4E4E4;
+  color: #e4e4e4;
   font-family: monospace;
   font-size: 1.2rem;
 }

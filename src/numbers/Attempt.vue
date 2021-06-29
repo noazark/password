@@ -1,44 +1,55 @@
 <template lang="html">
   <div class="self">
-    <div :class="['hint', 'text-right', {assist}]">
-      <span class="number" v-if="assist">#{{number}}</span>
+    <div :class="['hint', 'text-right', { assist }]">
+      <span class="number" v-if="assist">#{{ number }}</span>
     </div>
     <div class="parts">
-      <span :class="[{'close-match': !isMatch(el, i) && isCorrect(el, i), match: isMatch(el, i)}, 'part']" v-for="el, i in attempt.solution">{{el}}</span>
+      <span
+        :class="[
+          {
+            'close-match': !isMatch(el, i) && isCorrect(el, i),
+            match: isMatch(el, i)
+          },
+          'part'
+        ]"
+        v-for="(el, i) in attempt.solution"
+        :key="i"
+        >{{ el }}</span
+      >
     </div>
-    <div :class="['hint', 'text-left', {assist}]">
-      <span class="match">{{matchCount}}</span>
-      <span class="close-match">{{closeMatchCount}}</span>
+    <div :class="['hint', 'text-left', { assist }]">
+      <span class="match">{{ matchCount }}</span>
+      <span class="close-match">{{ closeMatchCount }}</span>
     </div>
   </div>
 </template>
 
 <script>
-import {getCount, MATCH, CLOSE_MATCH, SCORE} from '../../index'
+import { getCount, MATCH, CLOSE_MATCH, SCORE } from "@/gameplay";
 
 export default {
-  props: ['number', 'attempt', 'assist'],
+  props: ["number", "attempt", "assist"],
 
   computed: {
-    matchCount () {
-      return getCount(MATCH, this.attempt)
+    matchCount() {
+      return getCount(MATCH, this.attempt);
     },
 
-    closeMatchCount () {
-      return getCount(CLOSE_MATCH, this.attempt)
+    closeMatchCount() {
+      return getCount(CLOSE_MATCH, this.attempt);
     }
   },
 
   methods: {
-    isMatch (el, i) {
-      return this.assist && this.attempt.test[SCORE][i] === MATCH
+    isMatch(el, i) {
+      return this.assist && this.attempt.test[SCORE][i] === MATCH;
     },
 
-    isCorrect (el, i) {
-      return this.assist && this.attempt.test[SCORE][i] === CLOSE_MATCH
+    isCorrect(el, i) {
+      return this.assist && this.attempt.test[SCORE][i] === CLOSE_MATCH;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -54,7 +65,7 @@ export default {
 .number,
 .match,
 .close-match {
-  color: #E4E4E4;
+  color: #e4e4e4;
   display: inline;
   font-family: monospace;
 }
