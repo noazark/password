@@ -22,15 +22,11 @@ export type Game = {
   password: Password;
   attempts: Attempt[];
   stage: Password;
-  startTimestamp?: number;
-  lastAttemptTimestamp?: number;
 };
 
 export function createGame(passwordLength: number): Game {
   return {
     password: createPassword(passwordLength),
-    startTimestamp: undefined,
-    lastAttemptTimestamp: Date.now(),
     attempts: [],
     stage: [],
   };

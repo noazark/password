@@ -94,10 +94,6 @@ export default defineComponent({
 
       state.attempts = makeAttempt(state.password, state.attempts, state.stage);
       state.stage = [];
-
-      if (state.attempts.length === 1) {
-        state.startTimestamp = Date.now();
-      }
     }
 
     function restart() {
