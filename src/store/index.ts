@@ -5,7 +5,7 @@ import {
   makeAttempt,
   validate,
   Attempt,
-  Password
+  Password,
 } from "../gameplay";
 
 type Store = {
@@ -27,7 +27,7 @@ export const store = createStore<Store>({
       startTimestamp: undefined,
       lastAttemptTimestamp: undefined,
       attempts: [],
-      stage: []
+      stage: [],
     };
   },
 
@@ -53,7 +53,7 @@ export const store = createStore<Store>({
       } else {
         return false;
       }
-    }
+    },
   },
 
   mutations: {
@@ -79,7 +79,7 @@ export const store = createStore<Store>({
 
     SET_STAGE(state, val) {
       state.stage = val;
-    }
+    },
   },
 
   actions: {
@@ -97,6 +97,6 @@ export const store = createStore<Store>({
 
     submit({ state, commit }) {
       commit("ATTEMPT");
-    }
-  }
+    },
+  },
 });

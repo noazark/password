@@ -8,9 +8,9 @@
         :class="[
           {
             'close-match': !isMatch(el, i) && isCorrect(el, i),
-            match: isMatch(el, i)
+            match: isMatch(el, i),
           },
-          'part'
+          'part',
         ]"
         v-for="(el, i) in attempt.solution"
         :key="i"
@@ -37,7 +37,7 @@ export default {
 
     closeMatchCount() {
       return getCount(CLOSE_MATCH, this.attempt);
-    }
+    },
   },
 
   methods: {
@@ -47,8 +47,8 @@ export default {
 
     isCorrect(el, i) {
       return this.assist && this.attempt.test[SCORE][i] === CLOSE_MATCH;
-    }
-  }
+    },
+  },
 };
 </script>
 

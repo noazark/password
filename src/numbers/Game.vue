@@ -23,7 +23,7 @@
             :size="maxlength + 1"
             :maxlength="pw.length"
             @input="
-              setStage($event.target.value.split('').map(el => Number(el)))
+              setStage($event.target.value.split('').map((el) => Number(el)))
             "
             :value="stage.join('')"
           />
@@ -60,7 +60,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   components: {
-    Attempt
+    Attempt,
   },
 
   watch: {
@@ -68,8 +68,8 @@ export default {
       handler() {
         this.restart();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   computed: {
@@ -80,15 +80,15 @@ export default {
       "startTimestamp",
       "lastAttemptTimestamp",
       "attempts",
-      "stage"
+      "stage",
     ]),
 
-    ...mapGetters(["isWinner", "isValid"])
+    ...mapGetters(["isWinner", "isValid"]),
   },
 
   methods: {
-    ...mapActions(["restart", "setDifficulty", "setStage", "submit"])
-  }
+    ...mapActions(["restart", "setDifficulty", "setStage", "submit"]),
+  },
 };
 </script>
 

@@ -31,7 +31,7 @@ export function createPassword(len: number, values = 10) {
 
 export function validate(pw: Password, solution: number[]) {
   const hasCorrectLength = pw.length === solution.length;
-  const hasOnlyIntegers = solution.every(el => Number.isInteger(el));
+  const hasOnlyIntegers = solution.every((el) => Number.isInteger(el));
 
   return hasCorrectLength && hasOnlyIntegers;
 }
@@ -42,14 +42,14 @@ export function test(pw: Password, solution: number[]): Test {
   if (isValid === false) {
     return {
       [VALID]: isValid,
-      [SCORE]: undefined
+      [SCORE]: undefined,
     };
   }
 
-  const score: string[] = pw.map(n => String(n));
-  const solutionClone: string[] = solution.map(n => String(n));
+  const score: string[] = pw.map((n) => String(n));
+  const solutionClone: string[] = solution.map((n) => String(n));
 
-  for (let i in pw) {
+  for (const i in pw) {
     const el0 = pw[i];
     const el1 = solution[i];
 
@@ -58,7 +58,7 @@ export function test(pw: Password, solution: number[]): Test {
     }
   }
 
-  for (let i in pw) {
+  for (const i in pw) {
     const el0 = pw[i];
 
     if (score[i] !== MATCH && solutionClone.includes(String(el0))) {
@@ -67,7 +67,7 @@ export function test(pw: Password, solution: number[]): Test {
     }
   }
 
-  for (let i in pw) {
+  for (const i in pw) {
     if (score[i] !== MATCH && score[i] !== CLOSE_MATCH) {
       score[i] = PASS;
     }
@@ -79,12 +79,12 @@ export function test(pw: Password, solution: number[]): Test {
 
   return {
     [VALID]: isValid,
-    [SCORE]: solutionClone
+    [SCORE]: solutionClone,
   };
 }
 
 export function getCount(mark: string, attempt: Attempt) {
-  return attempt.test[SCORE]?.filter(el => el === mark).length;
+  return attempt.test[SCORE]?.filter((el) => el === mark).length;
 }
 
 export function makeAttempt(
@@ -96,5 +96,5 @@ export function makeAttempt(
 }
 
 export function hasWinningAttempt(pw: Password, attempts: Attempt[]) {
-  return attempts.some(attempt => getCount(MATCH, attempt) === pw.length);
+  return attempts.some((attempt) => getCount(MATCH, attempt) === pw.length);
 }

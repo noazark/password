@@ -9,14 +9,14 @@ import Game from "./numbers/Game.vue";
 
 export default {
   components: {
-    Game
+    Game,
   },
 
   computed: {
     isFullscreen() {
       return (screen.availHeight || screen.height - 30) <= window.innerHeight;
-    }
-  }
+    },
+  },
 };
 </script>
 

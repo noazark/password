@@ -55,7 +55,7 @@ export default {
     distributions() {
       const cycles = this.cycles;
       const keys = Object.keys(this.runs);
-      let result = keys.map(k => this.runs[k] / cycles);
+      let result = keys.map((k) => this.runs[k] / cycles);
 
       if (this.doSort) {
         result = result.slice().sort();
