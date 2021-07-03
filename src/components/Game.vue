@@ -1,8 +1,8 @@
 <template>
   <div class="game">
     <difficulty-select
-      :max="config.maxlength"
-      :value="state.pw.length"
+      :max="maxlength"
+      :value="selectedLength"
       @change="setDifficulty"
       @reset="restart"
     />
@@ -10,8 +10,8 @@
     <div class="stage">
       <template v-if="!isWinner">
         <attempt-input
-          :size="config.maxlength + 1"
-          :max="state.pw.length"
+          :size="maxlength + 1"
+          :max="selectedLength"
           :value="state.stage"
           :disabled="!isValid"
           @submit="submit"
@@ -29,7 +29,7 @@
       :assist="isWinner"
     />
     <ul class="instructions" v-else>
-      <li>Guess the {{ state.pw.length }} digit password</li>
+      <li>Guess the {{ selectedLength }} digit password</li>
       <li>Hints are given with each guess</li>
       <li>Restart for a new password</li>
     </ul>
@@ -37,14 +37,18 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, watch } from "@vue/runtime-core";
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  watch,
+} from "@vue/runtime-core";
 import {
   createGame,
-  createGameConfig,
   hasWinningAttempt,
   makeAttempt,
   validate,
-  GameConfig,
   Game,
   Password,
 } from "../gameplay";
@@ -60,16 +64,19 @@ export default defineComponent({
   },
 
   setup() {
-    const config: GameConfig = reactive(createGameConfig());
-    const state: Game = reactive(createGame(config));
+    const maxlength = ref(5);
+    const selectedLength = ref(3);
+    const state: Game = reactive(createGame(selectedLength.value));
 
     const isWinner = computed(() => {
-      return state.attempts && hasWinningAttempt(state.pw, state.attempts);
+      return (
+        state.attempts && hasWinningAttempt(state.password, state.attempts)
+      );
     });
 
     const isValid = computed(() => {
-      if (state.pw && state.attempts) {
-        const isValid = () => validate(state.pw, state.stage);
+      if (state.password && state.attempts) {
+        const isValid = () => validate(state.password, state.stage);
         const isFirst = () =>
           state.attempts == null || state.attempts.length === 0;
         const isNew = () =>
@@ -85,7 +92,7 @@ export default defineComponent({
     function submit() {
       console.log("submit", arguments);
 
-      state.attempts = makeAttempt(state.pw, state.attempts, state.stage);
+      state.attempts = makeAttempt(state.password, state.attempts, state.stage);
       state.stage = [];
 
       if (state.attempts.length === 1) {
@@ -94,24 +101,22 @@ export default defineComponent({
     }
 
     function restart() {
-      Object.assign(state, createGame(config));
+      Object.assign(state, createGame(selectedLength.value));
     }
 
     function setDifficulty(val: number) {
-      config.selectedLength = val;
+      selectedLength.value = val;
     }
 
     function setStage(val: Password) {
       state.stage = val;
     }
 
-    watch(
-      () => config.selectedLength,
-      () => restart()
-    );
+    watch(selectedLength, () => restart());
 
     return {
-      config,
+      maxlength,
+      selectedLength,
       state,
       isWinner,
       isValid,
