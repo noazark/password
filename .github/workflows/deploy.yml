@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '${{ steps.nodenv.outputs.node-version }}'
 
-      - name: Install and Build 🔧
+      - name: Install 🔧
         run: npm install
 
       - name: Lint 🐹
