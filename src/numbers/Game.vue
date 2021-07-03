@@ -93,11 +93,7 @@ export default defineComponent({
     });
 
     const isWinner = computed(() => {
-      if (state.attempts) {
-        return hasWinningAttempt(state.pw, state.attempts);
-      } else {
-        return false;
-      }
+      return state.attempts && hasWinningAttempt(state.pw, state.attempts);
     });
 
     const isValid = computed(() => {
@@ -175,10 +171,12 @@ export default defineComponent({
 }
 
 .restart {
+  display: inline-block;
   color: #da6253;
   font-family: monospace;
   font-size: 2rem;
   text-decoration: none;
+  margin-top: 24px;
 }
 
 .password {
