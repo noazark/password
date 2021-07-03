@@ -3,9 +3,9 @@
     <p class="password">
       <a
         href=""
-        :class="['part', { active: n <= pw.length }]"
+        :class="['part', { active: n <= state.pw.length }]"
         @click.prevent="setDifficulty(n)"
-        v-for="n in maxlength"
+        v-for="n in state.maxlength"
         :key="n"
         >*</a
       >
@@ -20,12 +20,12 @@
             autofocus
             inputmode="numeric"
             pattern="[0-9]*"
-            :size="maxlength + 1"
-            :maxlength="pw.length"
+            :size="state.maxlength + 1"
+            :maxlength="state.pw.length"
             @input="
               setStage($event.target.value.split('').map((el) => Number(el)))
             "
-            :value="stage.join('')"
+            :value="state.stage.join('')"
           />
           <br />
           <button class="stage-submit" :disabled="!isValid">submit</button>
@@ -36,60 +36,125 @@
       </template>
     </div>
 
-    <ul class="attempts" v-if="attempts.length > 0">
+    <ul class="attempts" v-if="state.attempts.length > 0">
       <attempt
         class="attempt"
-        v-for="(attempt, i) in attempts.slice().reverse()"
+        v-for="(attempt, i) in state.attempts.slice().reverse()"
         :key="i"
-        :number="attempts.length - i"
+        :number="state.attempts.length - i"
         :attempt="attempt"
         :assist="isWinner"
       ></attempt>
     </ul>
     <ul class="instructions" v-else>
-      <li>Guess the {{ pw.length }} digit password</li>
+      <li>Guess the {{ state.pw.length }} digit password</li>
       <li>Hints are given with each guess</li>
       <li>Restart for a new password</li>
     </ul>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Attempt from "./Attempt.vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { computed, defineComponent, reactive, watch } from "@vue/runtime-core";
+import {
+  createPassword,
+  hasWinningAttempt,
+  makeAttempt,
+  validate,
+  Attempt as AttemptType,
+  Password,
+} from "../gameplay";
 
-export default {
+type Store = {
+  maxlength: number;
+  selectedLength: number;
+  pw: Password;
+  startTimestamp?: number;
+  lastAttemptTimestamp?: number;
+  attempts: AttemptType[];
+  stage: Password;
+};
+
+export default defineComponent({
   components: {
     Attempt,
   },
 
-  watch: {
-    selectedLength: {
-      handler() {
-        this.restart();
-      },
-      immediate: true,
-    },
-  },
+  setup() {
+    const state: Store = reactive({
+      maxlength: 5,
+      selectedLength: 3,
+      pw: createPassword(3),
+      startTimestamp: undefined,
+      lastAttemptTimestamp: Date.now(),
+      attempts: [],
+      stage: [],
+    });
 
-  computed: {
-    ...mapState([
-      "maxlength",
-      "selectedLength",
-      "pw",
-      "startTimestamp",
-      "lastAttemptTimestamp",
-      "attempts",
-      "stage",
-    ]),
+    const isWinner = computed(() => {
+      if (state.attempts) {
+        return hasWinningAttempt(state.pw, state.attempts);
+      } else {
+        return false;
+      }
+    });
 
-    ...mapGetters(["isWinner", "isValid"]),
-  },
+    const isValid = computed(() => {
+      if (state.pw && state.attempts) {
+        const isValid = () => validate(state.pw, state.stage);
+        const isFirst = () =>
+          state.attempts == null || state.attempts.length === 0;
+        const isNew = () =>
+          state.stage.join("") !==
+          state.attempts[state.attempts.length - 1].solution.join("");
 
-  methods: {
-    ...mapActions(["restart", "setDifficulty", "setStage", "submit"]),
+        return isValid() && (isFirst() || isNew());
+      } else {
+        return false;
+      }
+    });
+
+    function submit() {
+      state.attempts = makeAttempt(state.pw, state.attempts, state.stage);
+      state.stage = [];
+
+      if (state.attempts.length === 1) {
+        state.startTimestamp = Date.now();
+      }
+    }
+
+    function restart() {
+      state.pw = createPassword(state.selectedLength);
+      state.attempts = [];
+      state.stage = [];
+      state.lastAttemptTimestamp = Date.now();
+    }
+
+    function setDifficulty(val: number) {
+      state.selectedLength = val;
+    }
+
+    function setStage(val: Password) {
+      state.stage = val;
+    }
+
+    watch(
+      () => state.selectedLength,
+      () => restart()
+    );
+
+    return {
+      state,
+      isWinner,
+      isValid,
+      submit,
+      restart,
+      setDifficulty,
+      setStage,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

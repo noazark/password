@@ -14,8 +14,7 @@
     "@noazark/util": "^2.0.2",
     "core-js": "^3.6.5",
     "random-int": "^2.0.1",
-    "vue": "^3.0.0",
-    "vuex": "^4.0.2"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
