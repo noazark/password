@@ -4,6 +4,7 @@
       :max="config.maxlength"
       :value="state.pw.length"
       @change="setDifficulty"
+      @reset="restart"
     />
 
     <div class="stage">
