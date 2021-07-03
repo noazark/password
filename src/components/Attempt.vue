@@ -25,28 +25,28 @@
 </template>
 
 <script>
-import { getCount, MATCH, CLOSE_MATCH, SCORE } from "@/gameplay";
+import { getCount, SCORE } from "@/gameplay";
 
 export default {
   props: ["number", "attempt", "assist"],
 
   computed: {
     matchCount() {
-      return getCount(MATCH, this.attempt);
+      return getCount(SCORE.MATCH, this.attempt);
     },
 
     closeMatchCount() {
-      return getCount(CLOSE_MATCH, this.attempt);
+      return getCount(SCORE.CLOSE_MATCH, this.attempt);
     },
   },
 
   methods: {
     isMatch(el, i) {
-      return this.assist && this.attempt.test[SCORE][i] === MATCH;
+      return this.assist && this.attempt.test.score[i] === SCORE.MATCH;
     },
 
     isCorrect(el, i) {
-      return this.assist && this.attempt.test[SCORE][i] === CLOSE_MATCH;
+      return this.assist && this.attempt.test.score[i] === SCORE.CLOSE_MATCH;
     },
   },
 };
