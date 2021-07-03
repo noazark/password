@@ -7,7 +7,6 @@ export const CLOSE_MATCH = "close-match";
 export const PASS = "pass";
 
 export type Password = number[];
-export type Solution = number[];
 
 export type Test = {
   valid: boolean;
@@ -15,9 +14,39 @@ export type Test = {
 };
 
 export type Attempt = {
-  solution: Solution;
+  solution: Password;
   test: Test;
 };
+
+export type GameConfig = {
+  maxlength: number;
+  selectedLength: number;
+};
+
+export type Game = {
+  pw: Password;
+  attempts: Attempt[];
+  stage: Password;
+  startTimestamp?: number;
+  lastAttemptTimestamp?: number;
+};
+
+export function createGameConfig(): GameConfig {
+  return {
+    maxlength: 5,
+    selectedLength: 3,
+  };
+}
+
+export function createGame(config: GameConfig): Game {
+  return {
+    pw: createPassword(config.selectedLength),
+    startTimestamp: undefined,
+    lastAttemptTimestamp: Date.now(),
+    attempts: [],
+    stage: [],
+  };
+}
 
 export function createPassword(len: number, values = 10) {
   const pw = [];
@@ -29,14 +58,14 @@ export function createPassword(len: number, values = 10) {
   return pw;
 }
 
-export function validate(pw: Password, solution: number[]) {
+export function validate(pw: Password, solution: Password) {
   const hasCorrectLength = pw.length === solution.length;
   const hasOnlyIntegers = solution.every((el) => Number.isInteger(el));
 
   return hasCorrectLength && hasOnlyIntegers;
 }
 
-export function test(pw: Password, solution: number[]): Test {
+export function test(pw: Password, solution: Password): Test {
   const isValid = validate(pw, solution);
 
   if (isValid === false) {
@@ -90,7 +119,7 @@ export function getCount(mark: string, attempt: Attempt) {
 export function makeAttempt(
   pw: Password,
   attempts: Attempt[],
-  solution: Solution
+  solution: Password
 ) {
   return [...attempts, { solution, test: test(pw, solution) }];
 }

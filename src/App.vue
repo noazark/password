@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Game from "./numbers/Game.vue";
+import Game from "@/components/Game.vue";
 
 export default {
   components: {
