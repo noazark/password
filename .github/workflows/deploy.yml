@@ -21,10 +21,16 @@ jobs:
           node-version: '${{ steps.nodenv.outputs.node-version }}'
 
       - name: Install and Build 🔧
-        run: |
-          npm install
-          npm run lint
-          npm run build
+        run: npm install
+
+      - name: Lint 🐹
+        run: npm run lint
+
+      - name: Test 📐
+        run: npm run test:unit
+
+      - name: Build 🏠
+        run: npm run build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.3
