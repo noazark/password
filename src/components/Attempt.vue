@@ -1,59 +1,57 @@
 <template lang="html">
-  <div class="self">
-    <div :class="['hint', 'text-right', { assist }]">
-      <span class="number" v-if="assist">#{{ number }}</span>
+  <div class="attempt">
+    <div class="attempt-number">
+      <template v-if="assist">#{{ number }}</template>
     </div>
     <div class="parts">
       <span
-        :class="[
-          {
-            'close-match': !isMatch(el, i) && isCorrect(el, i),
-            match: isMatch(el, i),
-          },
-          'part',
-        ]"
+        :class="[{ [attempt.test.score[i]]: assist }, 'part']"
         v-for="(el, i) in attempt.solution"
         :key="i"
         >{{ el }}</span
       >
     </div>
-    <div :class="['hint', 'text-left', { assist }]">
-      <span class="match">{{ matchCount }}</span>
-      <span class="close-match">{{ closeMatchCount }}</span>
+    <div :class="['hint']">
+      <span :class="score" v-for="score in hints" :key="score">
+        {{ getCount(score, attempt) }}
+      </span>
     </div>
   </div>
 </template>
 
-<script>
-import { getCount, SCORE } from "@/gameplay";
+<script lang="ts">
+import { getCount, SCORE, Attempt } from "@/gameplay";
+import { defineComponent, PropType } from "@vue/runtime-core";
 
-export default {
-  props: ["number", "attempt", "assist"],
-
-  computed: {
-    matchCount() {
-      return getCount(SCORE.MATCH, this.attempt);
+export default defineComponent({
+  props: {
+    number: {
+      type: Number,
+      required: true,
     },
-
-    closeMatchCount() {
-      return getCount(SCORE.CLOSE_MATCH, this.attempt);
+    attempt: {
+      type: Object as PropType<Attempt>,
+      required: true,
     },
-  },
-
-  methods: {
-    isMatch(el, i) {
-      return this.assist && this.attempt.test.score[i] === SCORE.MATCH;
-    },
-
-    isCorrect(el, i) {
-      return this.assist && this.attempt.test.score[i] === SCORE.CLOSE_MATCH;
+    assist: {
+      type: Boolean,
+      default: false,
     },
   },
-};
+
+  setup() {
+    const hints = [SCORE.MATCH, SCORE.CLOSE_MATCH];
+
+    return {
+      hints,
+      getCount,
+    };
+  },
+});
 </script>
 
 <style scoped>
-.self {
+.attempt {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -61,38 +59,27 @@ export default {
   width: 100%;
 }
 
-.part,
-.number,
+.attempt-number,
 .match,
-.close-match {
+.close_match {
   color: #e4e4e4;
   display: inline;
   font-family: monospace;
+  font-weight: bold;
+  font-size: 2rem;
+  opacity: 0.5;
 }
 
-.part,
-.part.match,
-.part.close-match {
+.part {
+  color: #e4e4e4;
+  font-family: monospace;
   box-sizing: border-box;
   font-weight: normal;
   font-size: 4rem;
   opacity: 1;
 }
 
-.number,
-.match,
-.close-match {
-  font-weight: bold;
-  font-size: 2rem;
-}
-
-.assist .number,
-.assist .match,
-.assist .close-match {
-  opacity: 0.5;
-}
-
-.number {
+.attempt-number {
   color: rgba(255, 255, 255, 0.15);
 }
 
@@ -100,19 +87,17 @@ export default {
   color: #9dd29a;
 }
 
-.close-match {
+.close_match {
   color: #6cb2bd;
+}
+
+.attempt-number {
+  width: 100%;
+  text-align: right;
 }
 
 .hint {
   width: 100%;
-}
-
-.text-left {
   text-align: left;
-}
-
-.text-right {
-  text-align: right;
 }
 </style>
