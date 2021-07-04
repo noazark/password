@@ -90,8 +90,6 @@ export default defineComponent({
     });
 
     function submit() {
-      console.log("submit", arguments);
-
       state.attempts = makeAttempt(state.password, state.attempts, state.stage);
       state.stage = [];
     }

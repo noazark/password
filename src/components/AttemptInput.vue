@@ -1,5 +1,5 @@
 <template>
-  <form class="stage" @submit.stop.prevent="">
+  <form class="stage" @submit.prevent="handleSubmit">
     <input
       autofocus
       inputmode="numeric"
@@ -10,13 +10,7 @@
       :value="textValue"
     />
     <br />
-    <button
-      class="stage-submit"
-      @submit.stop.prevent="handleSubmit"
-      :disabled="disabled"
-    >
-      submit
-    </button>
+    <button class="stage-submit" :disabled="disabled">submit</button>
   </form>
 </template>
 
@@ -47,10 +41,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const textValue = computed(() => props.value.join(""));
 
-    function handleSubmit(e: Event) {
-      e.stopPropagation();
-      e.preventDefault();
-      emit("submit", props.value);
+    function handleSubmit(evt: Event) {
+      evt.stopImmediatePropagation();
+      emit("submit");
     }
 
     function handleInput(evt: KeyboardEvent) {
