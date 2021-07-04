@@ -11,7 +11,7 @@
         >{{ el }}</span
       >
     </div>
-    <div :class="['hint']">
+    <div class="hint">
       <span :class="score" v-for="score in hints" :key="score">
         {{ getCount(score, attempt) }}
       </span>
