@@ -9,6 +9,9 @@ test.each`
   ${[1]}             | ${[1]}             | ${true}  | ${[M]}       | ${"short match"}
   ${[1, 2, 3]}       | ${[1, 2, 3]}       | ${true}  | ${[M, M, M]} | ${"long match"}
   ${[1, 2, 3]}       | ${[1, 3, 4]}       | ${true}  | ${[M, C, P]} | ${"close match"}
+  ${[3, 2, 3]}       | ${[1, 3, 4]}       | ${true}  | ${[P, C, P]} | ${"repeated password part"}
+  ${[3, 2, 3]}       | ${[1, 3, 3]}       | ${true}  | ${[P, C, M]} | ${"repeated solution part"}
+  ${[1, 2, 3]}       | ${[1, 3, 3]}       | ${true}  | ${[M, P, M]} | ${"extra solution part"}
   ${[1, 2, 3]}       | ${[1, 2]}          | ${false} | ${undefined} | ${"solution too short"}
   ${[1, 2, 3]}       | ${[1, 2, 3, 4]}    | ${false} | ${undefined} | ${"solution too long"}
   ${[1, 2, 3]}       | ${null}            | ${false} | ${undefined} | ${"empty solution"}
