@@ -101,8 +101,8 @@ export function testSolution(password: Password, solution: Password): Test {
   };
 }
 
-export function getCount(mark: string, attempt: Attempt): number {
-  return attempt.test.score?.filter((el) => el === mark).length || 0;
+export function getCount(val: SCORE, attempt: Attempt): number {
+  return attempt.test.score?.filter((el) => el === val).length || 0;
 }
 
 export function makeAttempt(

@@ -1,4 +1,4 @@
-import { SCORE, testSolution, validate } from "./gameplay";
+import { SCORE, Attempt, testSolution, validate, getCount } from "./gameplay";
 
 const M = SCORE.MATCH;
 const C = SCORE.CLOSE_MATCH;
@@ -31,4 +31,22 @@ test.each`
   ${["1", "2", "3"]} | ${[1, 2, 3]}       | ${false} | ${"password contains non-integers"}
 `("gameplay.validate - $note", ({ password, solution, valid }) => {
   expect(validate(password, solution)).toEqual(valid);
+});
+
+test.each`
+  score              | match | close_match | pass | note
+  ${[M, M, P, M, C]} | ${3}  | ${1}        | ${1} | ${"little bit of everything"}
+  ${[M, M, P]}       | ${2}  | ${0}        | ${1} | ${"one score is missing"}
+  ${[M, C]}          | ${1}  | ${1}        | ${0} | ${"shorter, one score is missing"}
+  ${[]}              | ${0}  | ${0}        | ${0} | ${"empty score"}
+  ${[M, "X", C]}     | ${1}  | ${1}        | ${0} | ${"surprise!"}
+`("gameplay.getCount - $note", ({ score, match, close_match, pass }) => {
+  const attempt = {
+    solution: [1, 1, 1],
+    test: { valid: true, score },
+  };
+
+  expect(getCount(SCORE.MATCH, attempt)).toEqual(match);
+  expect(getCount(SCORE.CLOSE_MATCH, attempt)).toEqual(close_match);
+  expect(getCount(SCORE.PASS, attempt)).toEqual(pass);
 });
