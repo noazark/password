@@ -8,9 +8,9 @@ export enum SCORE {
 
 export type Password = number[];
 
-export type Test = {
+type Test = {
   valid: boolean;
-  score: string[] | undefined;
+  score: SCORE[] | undefined;
 };
 
 export type Attempt = {
@@ -51,53 +51,44 @@ export function validate(password: Password, solution: Password): boolean {
   return hasCorrectLength && hasOnlyIntegers;
 }
 
-export function testSolution(password: Password, solution: Password): Test {
-  const isValid = validate(password, solution);
-
-  if (isValid === false) {
+export function testSolution(password: Password, solution: Password): Attempt {
+  // quickly invalidate test
+  if (validate(password, solution) === false) {
     return {
-      valid: isValid,
-      score: undefined,
+      solution,
+      test: {
+        valid: false,
+        score: undefined,
+      },
     };
   }
 
-  const score: string[] = password.map((n) => String(n));
-  const solutionClone: string[] = solution.map((n) => String(n));
+  // default to pass
+  const score: SCORE[] = solution.map(() => SCORE.PASS);
 
+  // find exact matches
   for (const i in password) {
-    const el0 = password[i];
-    const el1 = solution[i];
-
-    if (el0 === el1) {
-      score[i] = solutionClone[parseInt(i)] = SCORE.MATCH;
+    if (password[i] === solution[i]) {
+      score[i] = SCORE.MATCH;
     }
   }
 
+  // find close matches
   for (const i in password) {
     const el0 = password[i];
+    const idx = solution.indexOf(el0);
 
-    if (score[i] !== SCORE.MATCH && solutionClone.includes(String(el0))) {
-      const idx = solutionClone.indexOf(String(el0));
-      score[i] = solutionClone[idx] = SCORE.CLOSE_MATCH;
-    }
-  }
-
-  for (const i in password) {
-    if (score[i] !== SCORE.MATCH && score[i] !== SCORE.CLOSE_MATCH) {
-      score[i] = SCORE.PASS;
-    }
-
-    if (
-      solutionClone[i] !== SCORE.MATCH &&
-      solutionClone[i] !== SCORE.CLOSE_MATCH
-    ) {
-      solutionClone[i] = SCORE.PASS;
+    if (score[i] !== SCORE.MATCH && idx >= 0) {
+      score[idx] = SCORE.CLOSE_MATCH;
     }
   }
 
   return {
-    valid: isValid,
-    score: solutionClone,
+    solution,
+    test: {
+      valid: true,
+      score,
+    },
   };
 }
 
@@ -110,7 +101,7 @@ export function makeAttempt(
   attempts: Attempt[],
   solution: Password
 ) {
-  return [...attempts, { solution, test: testSolution(password, solution) }];
+  return [...attempts, testSolution(password, solution)];
 }
 
 export function hasWinningAttempt(password: Password, attempts: Attempt[]) {

@@ -19,7 +19,7 @@ test.each`
   ${[1, 2, 3]}       | ${["a", "b", "c"]} | ${false} | ${undefined} | ${"solution contains non-integers"}
   ${["a", "b", "c"]} | ${[1, 2, 3]}       | ${false} | ${undefined} | ${"password contains non-integers"}
 `("gameplay.test - $note", ({ password, solution, valid, score }) => {
-  expect(testSolution(password, solution)).toEqual({ valid, score });
+  expect(testSolution(password, solution).test).toEqual({ valid, score });
 });
 
 test.each`
