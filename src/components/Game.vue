@@ -37,21 +37,18 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import {
-  computed,
-  defineComponent,
-  reactive,
-  ref,
-  watch,
-} from "@vue/runtime-core";
-import {
-  createGame,
-  hasWinningAttempt,
-  makeAttempt,
-  validate,
-  Game,
-  Password,
-} from "../gameplay";
+  maxlength,
+  selectedLength,
+  state,
+  isWinner,
+  isValid,
+  submit,
+  restart,
+  setDifficulty,
+  setStage,
+} from "@/state";
 import DifficultySelect from "@/components/DifficultySelect.vue";
 import AttemptInput from "@/components/AttemptInput.vue";
 import AttemptList from "@/components/AttemptList.vue";
@@ -64,50 +61,6 @@ export default defineComponent({
   },
 
   setup() {
-    const maxlength = ref(5);
-    const selectedLength = ref(3);
-    const state: Game = reactive(createGame(selectedLength.value));
-
-    const isWinner = computed(() => {
-      return (
-        state.attempts && hasWinningAttempt(state.password, state.attempts)
-      );
-    });
-
-    const isValid = computed(() => {
-      if (state.password && state.attempts) {
-        const isValid = () => validate(state.password, state.stage);
-        const isFirst = () =>
-          state.attempts == null || state.attempts.length === 0;
-        const isNew = () =>
-          state.stage.join("") !==
-          state.attempts[state.attempts.length - 1].solution.join("");
-
-        return isValid() && (isFirst() || isNew());
-      } else {
-        return false;
-      }
-    });
-
-    function submit() {
-      state.attempts = makeAttempt(state.password, state.attempts, state.stage);
-      state.stage = [];
-    }
-
-    function restart() {
-      Object.assign(state, createGame(selectedLength.value));
-    }
-
-    function setDifficulty(val: number) {
-      selectedLength.value = val;
-    }
-
-    function setStage(val: Password) {
-      state.stage = val;
-    }
-
-    watch(selectedLength, () => restart());
-
     return {
       maxlength,
       selectedLength,
