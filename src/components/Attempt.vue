@@ -1,8 +1,6 @@
 <template lang="html">
   <div class="attempt">
-    <div class="attempt-number">
-      <template v-if="assist">#{{ number }}</template>
-    </div>
+    <div class="attempt-number">#{{ number }}</div>
     <div class="parts">
       <span
         :class="[{ [attempt.test.score[i]]: assist }, 'part']"
