@@ -1,19 +1,39 @@
 <template>
   <div class="game">
-    <difficulty-select :max="maxlength" :value="selectedLength" @change="setDifficulty" @reset="restart" />
+    <difficulty-select
+      :max="maxlength"
+      :value="selectedLength"
+      @change="setDifficulty"
+      @reset="restart"
+    />
 
     <div class="stage">
       <template v-if="!isWinner">
-        <attempt-input :size="maxlength + 1" :max="selectedLength" :value="state.stage" :disabled="!isValid"
-          @submit="submit" @input="setStage" />
+        <attempt-input
+          :size="maxlength + 1"
+          :max="selectedLength"
+          :value="state.stage"
+          :disabled="!isValid"
+          @submit="submit"
+          @input="setStage"
+        />
       </template>
       <template v-else>
-        <div class="part">You Win</div>
+        <div class="part">
+          You Win
+        </div>
       </template>
     </div>
 
-    <attempt-list v-if="state.attempts.length > 0" :attempts="state.attempts" :assist="isWinner" />
-    <ul class="instructions" v-else>
+    <attempt-list
+      v-if="state.attempts.length > 0"
+      :attempts="state.attempts"
+      :assist="isWinner"
+    />
+    <ul
+      v-else
+      class="instructions"
+    >
       <li>Guess the {{ selectedLength }} digit password</li>
       <li>Hints are given with each guess</li>
       <li>Restart for a new password</li>

@@ -1,13 +1,26 @@
 <template>
   <div class="password">
-    <a href="" :class="['part', { active: n <= props.value }]" @click.prevent="$emit('change', n)" v-for="n in props.max"
-      :key="n">*</a>
-    <br />
-    <a href="" class="restart" @click.prevent="$emit('reset')">restart</a>
+    <a
+      v-for="n in props.max"
+      :key="n"
+      href=""
+      :class="['part', { active: n <= props.value }]"
+      @click.prevent="emit('change', n)"
+    >*</a>
+    <br>
+    <a
+      href=""
+      class="restart"
+      @click.prevent="emit('reset')"
+    >restart</a>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { defineProps, defineEmits } from 'vue';
+
+const emit = defineEmits(["change", "reset"])
+
 const props = defineProps({
   max: {
     type: Number,

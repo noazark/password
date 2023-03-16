@@ -1,39 +1,33 @@
 <template>
   <ul class="attempts">
-    <attempt class="attempt" v-for="(attempt, i) in orderedAttempts" :key="i" :number="attempts.length - i"
-      :attempt="attempt" :assist="assist" />
+    <PasswordAttempt
+      v-for="(attempt, i) in orderedAttempts"
+      :key="i"
+      class="attempt"
+      :number="attempts.length - i"
+      :attempt="attempt"
+      :assist="assist"
+    />
   </ul>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from "@vue/runtime-core";
-import Attempt from "@/components/PasswordAttempt.vue";
+<script lang="ts" setup>
+import { computed, defineProps, PropType } from "@vue/runtime-core";
+import PasswordAttempt from "@/components/PasswordAttempt.vue";
 import { Attempt as AttemptType } from "@/gameplay";
 
-export default defineComponent({
-  props: {
-    attempts: {
-      type: Array as PropType<AttemptType[]>,
-      default: () => [],
-    },
-    assist: {
-      type: Boolean,
-    },
+const props = defineProps({
+  attempts: {
+    type: Array as PropType<AttemptType[]>,
+    default: () => [],
   },
-
-  components: {
-    Attempt,
+  assist: {
+    type: Boolean,
   },
+})
 
-  setup(props) {
-    const orderedAttempts = computed(() => {
-      return props.attempts.slice().reverse();
-    });
-
-    return {
-      orderedAttempts,
-    };
-  },
+const orderedAttempts = computed(() => {
+  return props.attempts.slice().reverse();
 });
 </script>
 

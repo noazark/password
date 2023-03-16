@@ -1,12 +1,22 @@
 <template>
   <div class="attempt">
-    <div class="attempt-number">#{{ number }}</div>
+    <div class="attempt-number">
+      #{{ number }}
+    </div>
     <div class="parts">
-      <span :class="[{ [attempt.test.score[i]]: assist }, 'part']" v-for="(el, i) in attempt.solution" :key="i">{{ el
+      <span
+        v-for="(el, i) in attempt.solution"
+        :key="i"
+        :class="[{ [attempt.test.score[i]]: assist }, 'part']"
+      >{{ el
       }}</span>
     </div>
     <div class="hint">
-      <span :class="score" v-for="score in hints" :key="score">
+      <span
+        v-for="score in hints"
+        :key="score"
+        :class="score"
+      >
         {{ getCount(score, attempt) }}
       </span>
     </div>

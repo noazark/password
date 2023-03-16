@@ -1,62 +1,69 @@
 <template>
-  <form class="stage" @submit.prevent="handleSubmit">
-    <input autofocus inputmode="numeric" pattern="[0-9]*" :size="size" :maxlength="max" @input.stop.prevent="handleInput"
-      :value="textValue" />
-    <br />
-    <button class="stage-submit" :disabled="disabled">submit</button>
+  <form
+    class="stage"
+    @submit.prevent="handleSubmit"
+  >
+    <input
+      autofocus
+      inputmode="numeric"
+      pattern="[0-9]*"
+      :size="size"
+      :maxlength="max"
+      :value="textValue"
+      @input.stop.prevent="handleInput"
+    >
+    <br>
+    <button
+      class="stage-submit"
+      :disabled="disabled"
+    >
+      submit
+    </button>
   </form>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { Password } from "@/gameplay";
-import { computed, defineComponent, PropType } from "@vue/runtime-core";
+import { computed, defineEmits, defineProps, PropType } from "vue";
 
-export default defineComponent({
-  props: {
-    max: {
-      type: Number,
-      default: 3,
-    },
-    size: {
-      type: Number,
-      default: 5,
-    },
-    value: {
-      type: Array as PropType<Password>,
-      default: () => [],
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+const emit = defineEmits(["submit", "input"])
+
+const props = defineProps({
+  max: {
+    type: Number,
+    default: 3,
   },
-
-  setup(props, { emit }) {
-    const textValue = computed(() => props.value.join(""));
-
-    function handleSubmit(evt: Event) {
-      evt.stopImmediatePropagation();
-      emit("submit");
-    }
-
-    function handleInput(evt: KeyboardEvent) {
-      const el = (evt.target as HTMLInputElement) || null;
-
-      if (el) {
-        emit(
-          "input",
-          el.value.split("").map((el) => Number(el))
-        );
-      }
-    }
-
-    return {
-      textValue,
-      handleSubmit,
-      handleInput,
-    };
+  size: {
+    type: Number,
+    default: 5,
   },
-});
+  value: {
+    type: Array as PropType<Password>,
+    default: () => [],
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+const textValue = computed(() => props.value.join(""));
+
+function handleSubmit(evt: Event) {
+  evt.stopImmediatePropagation();
+  emit("submit");
+}
+
+function handleInput(evt: Event) {
+  const el = (evt.target as HTMLInputElement) || null;
+
+  if (el) {
+    emit(
+      "input",
+      el.value.split("").map((el) => Number(el))
+    );
+  }
+}
 </script>
 
 <style>

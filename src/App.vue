@@ -1,6 +1,9 @@
 <template>
-  <div id="app" :class="{ fullscreen: isFullscreen }">
-    <game></game>
+  <div
+    id="app"
+    :class="{ fullscreen: isFullscreen }"
+  >
+    <game />
   </div>
 </template>
 

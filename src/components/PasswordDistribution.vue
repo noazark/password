@@ -1,16 +1,26 @@
 <template>
   <div class="distribution">
     cycles: {{ cycles }}
-    <br />
-    <label><input type="checkbox" @change="doSort = $event.target.checked" :checked="doSort" />
+    <br>
+    <label><input
+      type="checkbox"
+      :checked="doSort"
+      @change="doSort = $event.target.checked"
+    >
       sort</label>
-    <br />
-    <br />
+    <br>
+    <br>
     variations: {{ variations }} / {{ Math.pow(values, length) }}
-    <br />
+    <br>
     <ul>
-      <li v-for="(distribution, i) in distributions.reverse()" :key="i">
-        <div class="line" :style="{ width: `${(100 * distribution) / maxDistribution}%` }"></div>
+      <li
+        v-for="(distribution, i) in distributions.reverse()"
+        :key="i"
+      >
+        <div
+          class="line"
+          :style="{ width: `${(100 * distribution) / maxDistribution}%` }"
+        />
       </li>
     </ul>
   </div>
@@ -28,14 +38,6 @@ export default {
       cycles: 0,
       runs: {},
     };
-  },
-
-  mounted() {
-    this.run();
-  },
-
-  updated() {
-    setTimeout(() => this.run());
   },
 
   computed: {
@@ -58,6 +60,14 @@ export default {
     maxDistribution() {
       return Math.max(...this.distributions);
     },
+  },
+
+  mounted() {
+    this.run();
+  },
+
+  updated() {
+    setTimeout(() => this.run());
   },
 
   methods: {
