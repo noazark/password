@@ -1,13 +1,9 @@
-<template lang="html">
+<template>
   <div class="attempt">
     <div class="attempt-number">#{{ number }}</div>
     <div class="parts">
-      <span
-        :class="[{ [attempt.test.score[i]]: assist }, 'part']"
-        v-for="(el, i) in attempt.solution"
-        :key="i"
-        >{{ el }}</span
-      >
+      <span :class="[{ [attempt.test.score[i]]: assist }, 'part']" v-for="(el, i) in attempt.solution" :key="i">{{ el
+      }}</span>
     </div>
     <div class="hint">
       <span :class="score" v-for="score in hints" :key="score">

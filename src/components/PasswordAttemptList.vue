@@ -1,19 +1,13 @@
 <template>
   <ul class="attempts">
-    <attempt
-      class="attempt"
-      v-for="(attempt, i) in orderedAttempts"
-      :key="i"
-      :number="attempts.length - i"
-      :attempt="attempt"
-      :assist="assist"
-    />
+    <attempt class="attempt" v-for="(attempt, i) in orderedAttempts" :key="i" :number="attempts.length - i"
+      :attempt="attempt" :assist="assist" />
   </ul>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "@vue/runtime-core";
-import Attempt from "@/components/Attempt.vue";
+import Attempt from "@/components/PasswordAttempt.vue";
 import { Attempt as AttemptType } from "@/gameplay";
 
 export default defineComponent({
@@ -44,7 +38,7 @@ export default defineComponent({
 </script>
 
 <style>
-.attempts > li {
+.attempts>li {
   list-style: none;
 }
 </style>

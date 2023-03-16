@@ -1,25 +1,16 @@
-<template lang="html">
+<template>
   <div class="distribution">
     cycles: {{ cycles }}
     <br />
-    <label
-      ><input
-        type="checkbox"
-        @change="doSort = $event.target.checked"
-        :checked="doSort"
-      />
-      sort</label
-    >
+    <label><input type="checkbox" @change="doSort = $event.target.checked" :checked="doSort" />
+      sort</label>
     <br />
     <br />
     variations: {{ variations }} / {{ Math.pow(values, length) }}
     <br />
     <ul>
       <li v-for="(distribution, i) in distributions.reverse()" :key="i">
-        <div
-          class="line"
-          :style="{ width: `${(100 * distribution) / maxDistribution}%` }"
-        ></div>
+        <div class="line" :style="{ width: `${(100 * distribution) / maxDistribution}%` }"></div>
       </li>
     </ul>
   </div>

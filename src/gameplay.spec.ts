@@ -1,4 +1,4 @@
-import { SCORE, Attempt, testSolution, validate, getCount } from "./gameplay";
+import { SCORE, testSolution, validate, getCount } from "./gameplay";
 
 const M = SCORE.MATCH;
 const C = SCORE.CLOSE_MATCH;

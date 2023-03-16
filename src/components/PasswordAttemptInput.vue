@@ -1,14 +1,7 @@
 <template>
   <form class="stage" @submit.prevent="handleSubmit">
-    <input
-      autofocus
-      inputmode="numeric"
-      pattern="[0-9]*"
-      :size="size"
-      :maxlength="max"
-      @input.stop.prevent="handleInput"
-      :value="textValue"
-    />
+    <input autofocus inputmode="numeric" pattern="[0-9]*" :size="size" :maxlength="max" @input.stop.prevent="handleInput"
+      :value="textValue" />
     <br />
     <button class="stage-submit" :disabled="disabled">submit</button>
   </form>

@@ -1,33 +1,23 @@
 <template>
   <div class="password">
-    <a
-      href=""
-      :class="['part', { active: n <= value }]"
-      @click.prevent="$emit('change', n)"
-      v-for="n in max"
-      :key="n"
-      >*</a
-    >
+    <a href="" :class="['part', { active: n <= props.value }]" @click.prevent="$emit('change', n)" v-for="n in props.max"
+      :key="n">*</a>
     <br />
     <a href="" class="restart" @click.prevent="$emit('reset')">restart</a>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-
-export default defineComponent({
-  props: {
-    max: {
-      type: Number,
-      default: 5,
-    },
-    value: {
-      type: Number,
-      default: 3,
-    },
+<script lang="ts" setup>
+const props = defineProps({
+  max: {
+    type: Number,
+    default: 5,
   },
-});
+  value: {
+    type: Number,
+    default: 3,
+  },
+})
 </script>
 
 <style scoped>
@@ -45,7 +35,7 @@ export default defineComponent({
   padding-top: 1rem;
 }
 
-.password > .part {
+.password>.part {
   color: rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
   display: inline;

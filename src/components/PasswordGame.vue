@@ -1,33 +1,18 @@
 <template>
   <div class="game">
-    <difficulty-select
-      :max="maxlength"
-      :value="selectedLength"
-      @change="setDifficulty"
-      @reset="restart"
-    />
+    <difficulty-select :max="maxlength" :value="selectedLength" @change="setDifficulty" @reset="restart" />
 
     <div class="stage">
       <template v-if="!isWinner">
-        <attempt-input
-          :size="maxlength + 1"
-          :max="selectedLength"
-          :value="state.stage"
-          :disabled="!isValid"
-          @submit="submit"
-          @input="setStage"
-        />
+        <attempt-input :size="maxlength + 1" :max="selectedLength" :value="state.stage" :disabled="!isValid"
+          @submit="submit" @input="setStage" />
       </template>
       <template v-else>
         <div class="part">You Win</div>
       </template>
     </div>
 
-    <attempt-list
-      v-if="state.attempts.length > 0"
-      :attempts="state.attempts"
-      :assist="isWinner"
-    />
+    <attempt-list v-if="state.attempts.length > 0" :attempts="state.attempts" :assist="isWinner" />
     <ul class="instructions" v-else>
       <li>Guess the {{ selectedLength }} digit password</li>
       <li>Hints are given with each guess</li>
@@ -49,9 +34,9 @@ import {
   setDifficulty,
   setStage,
 } from "@/state";
-import DifficultySelect from "@/components/DifficultySelect.vue";
-import AttemptInput from "@/components/AttemptInput.vue";
-import AttemptList from "@/components/AttemptList.vue";
+import DifficultySelect from "@/components/PasswordDifficultySelect.vue";
+import AttemptInput from "@/components/PasswordAttemptInput.vue";
+import AttemptList from "@/components/PasswordAttemptList.vue";
 
 export default defineComponent({
   components: {
@@ -101,7 +86,7 @@ export default defineComponent({
   width: 100%;
 }
 
-.instructions > li {
+.instructions>li {
   list-style: none;
 }
 
@@ -111,7 +96,7 @@ export default defineComponent({
   font-size: 1.2rem;
 }
 
-.instructions > li {
+.instructions>li {
   margin-bottom: 0.75rem;
 }
 
