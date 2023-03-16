@@ -2,11 +2,7 @@
   "root": true,
   "env": {
     "es2021": true,
-    "jest": true
   },
-  "plugins": [
-    "jest"
-  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -21,10 +17,7 @@
       "files": [
         "**/__tests__/*.{j,t}s?(x)",
         "**/tests/unit/**/*.spec.{j,t}s?(x)"
-      ],
-      "env": {
-        "jest": true
-      }
+      ]
     }
   ]
 }

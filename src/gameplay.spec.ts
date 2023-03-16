@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest'
+
 import { SCORE, testSolution, validate, getCount } from "./gameplay";
 
 const M = SCORE.MATCH;
