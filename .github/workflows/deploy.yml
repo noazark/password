@@ -8,17 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v7
         with:
-          lfs: 'true'
+          lfs: "true"
 
-      - uses: nodenv/actions/node-version@main
-        id: nodenv
-
-      - name: Installing node version via .node-version
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v7
         with:
-          node-version: '${{ steps.nodenv.outputs.node-version }}'
+          node-version: 24
 
       - name: Install 🔧
         run: npm install
@@ -33,7 +29,7 @@ jobs:
         run: npm run build
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: dist
