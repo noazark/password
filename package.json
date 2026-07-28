@@ -6,24 +6,27 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore --fix src",
+    "lint": "eslint --fix src",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@typescript-eslint/parser": "^8.65.0",
-    "@vitejs/plugin-vue": "^4.1.0",
-    "eslint": "^8.36.0",
-    "eslint-plugin-vue": "^8.7.1",
-    "random-int": "^2.0.1",
-    "vite": "^4.2.3"
+    "@vitejs/plugin-vue": "^6.0.8",
+    "eslint-plugin-vue": "^10.10.0",
+    "random-int": "^3.1.0",
+    "vite": "^8.1.5"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^8.0.1",
+    "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
-    "prettier": "^2.8.4",
-    "typescript": "^4.9.5",
-    "vitest": "^0.29.3"
+    "eslint": "^10.8.0",
+    "globals": "^17.8.0",
+    "prettier": "^3.9.6",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10"
   },
   "browserslist": [
     "> 1%",

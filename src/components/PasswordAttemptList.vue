@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, PropType } from "@vue/runtime-core";
+import { computed, defineProps, PropType } from "vue";
 import PasswordAttempt from "@/components/PasswordAttempt.vue";
 import { Attempt as AttemptType } from "@/gameplay";
 

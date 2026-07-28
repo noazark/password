@@ -1,4 +1,4 @@
-import { computed, reactive, ref, watch } from "@vue/runtime-core";
+import { computed, reactive, ref, watch } from "vue";
 import {
   createGame,
   hasWinningAttempt,
